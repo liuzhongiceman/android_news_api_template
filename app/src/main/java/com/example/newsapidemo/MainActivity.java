@@ -2,9 +2,12 @@ package com.example.newsapidemo;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,11 +19,15 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     String News_Url;
     String API_KEY = "2c2cf2dad32f468d8c13cc3573ed6f76";
+    private ListView listview;
+    List<String> titles = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         News_Url = "https://newsapi.org/v1/articles?source=techcrunch&apiKey=" + API_KEY;
         new MainActivity.AsyncHttpTask().execute(News_Url);
+
     }
 
     public class AsyncHttpTask extends AsyncTask<String, Void, String>{
@@ -76,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             for(int i= 0;i<articles.length();i++){
                 JSONObject article = articles.optJSONObject(i);
                 String title = article.optString("title");
+                titles.add(title);
                 Log.i("title",title);
             }
         } catch (Exception e) {
